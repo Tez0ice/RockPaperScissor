@@ -59,23 +59,87 @@ function match(player , computer){
 }
 
 
-function game(){
-    while (PlayerScore != 5 && ComputerScore != 5){
-        const Userchoice = prompt("Rock , Paper or Scissor")
-        const RandInt = getRandomInt(0,3)
-        const RandChoice = getComputerChoice(RandInt)
-        console.log(match(Userchoice,RandChoice))
-        console.log(`Computer Score : ${ComputerScore}`)
-        console.log(`Player Score : ${PlayerScore}`)
+// function game(){
+    
+//     const Userchoice = prompt("Rock , Paper or Scissor")
+//     const RandInt = getRandomInt(0,3)
+//     const RandChoice = getComputerChoice(RandInt)
+//     console.log(match(Userchoice,RandChoice))
+//     console.log(`Computer Score : ${ComputerScore}`)
+//     console.log(`Player Score : ${PlayerScore}`)
+ 
+//     if (PlayerScore == 5){
+//         alert("Congrats!!!! You Win 5 rounds")
+//     }
+//     else{
+//         alert("Darn... You Lose")
+//     }
+
+// }
+
+var allButton = document.querySelectorAll("button")
+var contentDiv = document.querySelector("#content")
+
+let player_Score = document.createElement('p')
+let comScore = document.createElement('p')
+let result = document.createElement('p')
+let resetButton = document.createElement('button')
+
+
+
+resetButton.addEventListener("click", () => {
+    var child = contentDiv.lastElementChild;
+    PlayerScore = 0
+    ComputerScore = 0
+    result.textContent = ""
+    while (child) {
+        contentDiv.removeChild(child)
+        child = contentDiv.lastElementChild;
     }
 
-    if (PlayerScore == 5){
-        alert("Congrats!!!! You Win 5 rounds")
-    }
-    else{
-        alert("Darn... You Lose")
-    }
-}
+
+    allButton.forEach(function(node){
+        node.removeAttribute('disabled','')
+    })
+})
 
 
-game()
+allButton.forEach(function(node){
+    node.addEventListener("click", () => {
+        
+        let randChoice = getComputerChoice(getRandomInt(0,3))
+        console.log(match(node.textContent,randChoice))
+
+        if (contentDiv.childElementCount === 0){
+            player_Score.textContent = `Player Score : ${PlayerScore}`
+            comScore.textContent = `Computer Score : ${ComputerScore}`  
+            contentDiv.append(player_Score,comScore,result,resetButton)
+            resetButton.textContent = "Reset"
+
+        }
+
+        else{
+            player_Score.textContent = `Player Score : ${PlayerScore}`
+            comScore.textContent = `Computer Score : ${ComputerScore}`  
+        }
+
+        
+        if (PlayerScore == 5){
+            allButton.forEach(function(node){
+                node.setAttribute('disabled','')
+            })
+            result.textContent = "Congrats!! You win"
+
+        }
+
+        else if (ComputerScore == 5 ){
+            allButton.forEach(function(node){
+                node.setAttribute('disabled','')
+            })
+            result.textContent = "Bruh You Lose..."
+
+    }
+
+    })
+
+}) 
